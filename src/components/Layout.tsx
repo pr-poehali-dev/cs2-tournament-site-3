@@ -50,10 +50,11 @@ export default function Layout({ activeTab, onTabChange, children, isAdmin }: La
             onClick={() => onTabChange('home')}
             className="flex items-center gap-3 group"
           >
-            <div className="w-9 h-9 rounded flex items-center justify-center"
-              style={{ background: 'hsl(210,90%,55%)', boxShadow: '0 0 16px hsla(210,90%,55%,0.4)' }}>
-              <span className="font-rajdhani font-bold text-white text-sm tracking-wider">MLT</span>
-            </div>
+            <img
+              src="https://cdn.poehali.dev/projects/2a86203d-5c69-41c5-94ca-bbf83eb2d3a8/bucket/edbfff82-f432-498c-b9ad-7d653630bc08.png"
+              alt="MLT Tournaments"
+              className="w-10 h-10 rounded-full object-cover"
+            />
             <div className="hidden sm:block">
               <div className="font-rajdhani font-bold text-white text-lg leading-none tracking-wide">
                 MLT <span style={{ color: 'hsl(210,90%,55%)' }}>TOURNAMENT</span>
