@@ -178,18 +178,25 @@ export default function HomePage({ onNavigate }: HomePageProps) {
             {news.map((item, i) => (
               <div
                 key={item.id}
-                className="p-4 hover:bg-mlt-surface2 transition-colors cursor-pointer"
+                className="hover:bg-mlt-surface2 transition-colors cursor-pointer overflow-hidden"
                 style={{ borderBottom: '1px solid hsl(220,25%,16%)', borderRight: i % 2 === 0 ? '1px solid hsl(220,25%,16%)' : 'none' }}
               >
-                <div className="flex items-center gap-2 mb-2">
-                  <span className="font-rajdhani font-bold text-xs uppercase tracking-wider px-2 py-0.5 rounded"
-                    style={{ background: 'hsl(210,90%,55%,0.15)', color: 'hsl(210,90%,55%)' }}>
-                    {item.category}
-                  </span>
-                  <span className="font-ibm text-mlt-dim text-xs">{item.date}</span>
+                {item.image && (
+                  <div className="w-full h-36 overflow-hidden">
+                    <img src={item.image} alt={item.title} className="w-full h-full object-cover" />
+                  </div>
+                )}
+                <div className="p-4">
+                  <div className="flex items-center gap-2 mb-2">
+                    <span className="font-rajdhani font-bold text-xs uppercase tracking-wider px-2 py-0.5 rounded"
+                      style={{ background: 'hsl(210,90%,55%,0.15)', color: 'hsl(210,90%,55%)' }}>
+                      {item.category}
+                    </span>
+                    <span className="font-ibm text-mlt-dim text-xs">{item.date}</span>
+                  </div>
+                  <div className="font-rajdhani font-semibold text-white text-base leading-tight mb-1">{item.title}</div>
+                  <div className="font-ibm text-mlt-dim text-xs leading-relaxed line-clamp-2">{item.preview}</div>
                 </div>
-                <div className="font-rajdhani font-semibold text-white text-base leading-tight mb-1">{item.title}</div>
-                <div className="font-ibm text-mlt-dim text-xs leading-relaxed line-clamp-2">{item.preview}</div>
               </div>
             ))}
           </div>
@@ -199,20 +206,26 @@ export default function HomePage({ onNavigate }: HomePageProps) {
       {/* Sponsors */}
       <div>
         <div className="mlt-section-header mb-3">Партнёры и спонсоры</div>
-        <div className="mlt-card px-6 py-5">
-          <div className="flex flex-wrap items-center justify-center gap-6">
+        <div className="mlt-card px-6 py-6">
+          <div className="flex flex-wrap items-center justify-center gap-8">
             {sponsors.map(sp => (
-              <div key={sp.id} className="flex flex-col items-center gap-1">
+              <div key={sp.id} className="flex flex-col items-center gap-2">
                 <div
-                  className="px-5 py-2 rounded font-rajdhani font-bold tracking-widest text-sm"
+                  className="flex items-center justify-center rounded overflow-hidden"
                   style={{
-                    background: `${sp.color}20`,
-                    color: sp.color,
-                    border: `1px solid ${sp.color}40`,
-                    fontSize: sp.tier === 'title' ? '16px' : '13px',
+                    background: 'hsl(220,32%,13%)',
+                    border: '1px solid hsl(220,25%,20%)',
+                    padding: sp.tier === 'title' ? '10px 18px' : '8px 14px',
+                    width: sp.tier === 'title' ? '140px' : '120px',
+                    height: sp.tier === 'title' ? '80px' : '64px',
                   }}
                 >
-                  {sp.name}
+                  <img
+                    src={sp.image}
+                    alt={sp.name}
+                    className="max-w-full max-h-full object-contain"
+                    style={{ filter: 'brightness(1.05)' }}
+                  />
                 </div>
                 <span className="font-ibm text-mlt-dim text-xs uppercase tracking-wider">{sp.tier}</span>
               </div>

@@ -1,8 +1,172 @@
 import { useState } from 'react';
-import { teams, players, matches, tournaments, news } from '@/data/mockData';
+import { teams, players, matches, tournaments, news as initialNews } from '@/data/mockData';
 import Icon from '@/components/ui/icon';
 
 const ADMIN_PASSWORD = 'mlt2026';
+
+type NewsItem = {
+  id: string;
+  title: string;
+  date: string;
+  category: string;
+  preview: string;
+  image: string;
+};
+
+function NewsAdmin() {
+  const [items, setItems] = useState<NewsItem[]>(initialNews.map(n => ({ ...n, image: n.image || '' })));
+  const [editing, setEditing] = useState<string | null>(null);
+  const [showAdd, setShowAdd] = useState(false);
+  const [form, setForm] = useState<NewsItem>({ id: '', title: '', date: '', category: '', preview: '', image: '' });
+
+  const startEdit = (item: NewsItem) => {
+    setEditing(item.id);
+    setForm({ ...item });
+    setShowAdd(false);
+  };
+
+  const startAdd = () => {
+    const newId = 'n' + Date.now();
+    setForm({ id: newId, title: '', date: new Date().toISOString().slice(0, 10), category: 'НОВОСТИ', preview: '', image: '' });
+    setShowAdd(true);
+    setEditing(null);
+  };
+
+  const save = () => {
+    if (editing) {
+      setItems(items.map(i => i.id === editing ? { ...form } : i));
+      setEditing(null);
+    } else if (showAdd) {
+      setItems([{ ...form }, ...items]);
+      setShowAdd(false);
+    }
+  };
+
+  const remove = (id: string) => setItems(items.filter(i => i.id !== id));
+
+  const InputField = ({ label, field, multiline }: { label: string; field: keyof NewsItem; multiline?: boolean }) => (
+    <div>
+      <label className="font-ibm text-mlt-dim text-xs block mb-1">{label}</label>
+      {multiline ? (
+        <textarea
+          value={form[field]}
+          onChange={e => setForm({ ...form, [field]: e.target.value })}
+          rows={3}
+          className="w-full px-3 py-2 rounded font-ibm text-sm text-white placeholder-mlt-dim outline-none focus:ring-1 focus:ring-mlt-blue resize-none"
+          style={{ background: 'hsl(220,32%,14%)', border: '1px solid hsl(220,25%,18%)' }}
+        />
+      ) : (
+        <input
+          type="text"
+          value={form[field]}
+          onChange={e => setForm({ ...form, [field]: e.target.value })}
+          className="w-full px-3 py-2 rounded font-ibm text-sm text-white placeholder-mlt-dim outline-none focus:ring-1 focus:ring-mlt-blue"
+          style={{ background: 'hsl(220,32%,14%)', border: '1px solid hsl(220,25%,18%)' }}
+        />
+      )}
+    </div>
+  );
+
+  return (
+    <div className="space-y-4">
+      <div className="mlt-card overflow-hidden">
+        <div className="mlt-section-header flex items-center justify-between">
+          <span>Управление новостями</span>
+          <button
+            onClick={startAdd}
+            className="flex items-center gap-1.5 px-3 py-1 rounded font-rajdhani font-semibold text-xs uppercase tracking-wider text-white normal-case"
+            style={{ background: 'hsl(210,90%,55%)' }}>
+            <Icon name="Plus" size={12} />
+            Добавить
+          </button>
+        </div>
+        <div className="divide-y divide-mlt-border">
+          {items.map(item => (
+            <div key={item.id} className="px-4 py-3 flex items-start gap-3">
+              {item.image && (
+                <img src={item.image} alt="" className="w-16 h-12 object-cover rounded flex-shrink-0" />
+              )}
+              {!item.image && (
+                <div className="w-16 h-12 rounded flex-shrink-0 flex items-center justify-center"
+                  style={{ background: 'hsl(220,28%,14%)', border: '1px solid hsl(220,25%,18%)' }}>
+                  <Icon name="Image" size={16} style={{ color: 'hsl(215,15%,40%)' }} />
+                </div>
+              )}
+              <div className="flex-1 min-w-0">
+                <div className="flex items-center gap-2 mb-1 flex-wrap">
+                  <span className="font-rajdhani font-bold text-xs uppercase tracking-wider px-2 py-0.5 rounded"
+                    style={{ background: 'hsla(210,90%,55%,0.15)', color: 'hsl(210,90%,55%)' }}>
+                    {item.category}
+                  </span>
+                  <span className="font-ibm text-mlt-dim text-xs">{item.date}</span>
+                </div>
+                <div className="font-rajdhani font-semibold text-white text-sm">{item.title}</div>
+                <div className="font-ibm text-mlt-dim text-xs mt-0.5 line-clamp-1">{item.preview}</div>
+              </div>
+              <div className="flex gap-1 flex-shrink-0">
+                <button
+                  onClick={() => startEdit(item)}
+                  className="p-1.5 rounded text-mlt-dim hover:text-mlt-blue transition-colors"
+                  style={{ background: 'hsl(220,28%,14%)' }}>
+                  <Icon name="Edit" size={13} />
+                </button>
+                <button
+                  onClick={() => remove(item.id)}
+                  className="p-1.5 rounded text-mlt-dim hover:text-mlt-red transition-colors"
+                  style={{ background: 'hsl(220,28%,14%)' }}>
+                  <Icon name="Trash2" size={13} />
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Edit / Add form */}
+      {(editing || showAdd) && (
+        <div className="mlt-card overflow-hidden animate-fade-in">
+          <div className="mlt-section-header">{editing ? 'Редактировать новость' : 'Новая новость'}</div>
+          <div className="p-4 space-y-3">
+            <InputField label="Заголовок" field="title" />
+            <div className="grid grid-cols-2 gap-3">
+              <InputField label="Категория" field="category" />
+              <InputField label="Дата (ГГГГ-ММ-ДД)" field="date" />
+            </div>
+            <InputField label="Превью текст" field="preview" multiline />
+            <div>
+              <label className="font-ibm text-mlt-dim text-xs block mb-1">Фото (URL картинки)</label>
+              <input
+                type="text"
+                value={form.image}
+                onChange={e => setForm({ ...form, image: e.target.value })}
+                placeholder="https://example.com/image.jpg"
+                className="w-full px-3 py-2 rounded font-ibm text-sm text-white placeholder-mlt-dim outline-none focus:ring-1 focus:ring-mlt-blue"
+                style={{ background: 'hsl(220,32%,14%)', border: '1px solid hsl(220,25%,18%)' }}
+              />
+              {form.image && (
+                <img src={form.image} alt="preview" className="mt-2 h-28 rounded object-cover" />
+              )}
+            </div>
+            <div className="flex gap-2 pt-1">
+              <button
+                onClick={save}
+                className="px-5 py-2 rounded font-rajdhani font-bold text-sm uppercase tracking-wider text-white transition-opacity hover:opacity-90"
+                style={{ background: 'hsl(210,90%,55%)' }}>
+                Сохранить
+              </button>
+              <button
+                onClick={() => { setEditing(null); setShowAdd(false); }}
+                className="px-5 py-2 rounded font-rajdhani font-semibold text-sm uppercase tracking-wider text-mlt-dim hover:text-white transition-colors"
+                style={{ border: '1px solid hsl(220,25%,18%)' }}>
+                Отмена
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
 
 export default function AdminPage() {
   const [auth, setAuth] = useState(false);
@@ -432,43 +596,7 @@ export default function AdminPage() {
       )}
 
       {activeSection === 'news' && (
-        <div className="mlt-card overflow-hidden">
-          <div className="mlt-section-header flex items-center justify-between">
-            <span>Управление новостями</span>
-            <button className="flex items-center gap-1.5 px-3 py-1 rounded font-rajdhani font-semibold text-xs uppercase tracking-wider text-white normal-case"
-              style={{ background: 'hsl(210,90%,55%)' }}>
-              <Icon name="Plus" size={12} />
-              Добавить
-            </button>
-          </div>
-          <div className="divide-y divide-mlt-border">
-            {news.map(item => (
-              <div key={item.id} className="px-4 py-3 flex items-start gap-3">
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-center gap-2 mb-1 flex-wrap">
-                    <span className="font-rajdhani font-bold text-xs uppercase tracking-wider px-2 py-0.5 rounded"
-                      style={{ background: 'hsla(210,90%,55%,0.15)', color: 'hsl(210,90%,55%)' }}>
-                      {item.category}
-                    </span>
-                    <span className="font-ibm text-mlt-dim text-xs">{item.date}</span>
-                  </div>
-                  <div className="font-rajdhani font-semibold text-white text-sm">{item.title}</div>
-                  <div className="font-ibm text-mlt-dim text-xs mt-1 line-clamp-1">{item.preview}</div>
-                </div>
-                <div className="flex gap-1 flex-shrink-0">
-                  <button className="p-1.5 rounded text-mlt-dim hover:text-mlt-blue transition-colors"
-                    style={{ background: 'hsl(220,28%,14%)' }}>
-                    <Icon name="Edit" size={13} />
-                  </button>
-                  <button className="p-1.5 rounded text-mlt-dim hover:text-mlt-red transition-colors"
-                    style={{ background: 'hsl(220,28%,14%)' }}>
-                    <Icon name="Trash2" size={13} />
-                  </button>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
+        <NewsAdmin />
       )}
     </div>
   );

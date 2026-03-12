@@ -379,36 +379,52 @@ export const news = [
     title: 'PHANTOM FORCE сохраняют лидерство в MLT Season 3',
     date: '2026-03-10',
     category: 'РЕЗУЛЬТАТЫ',
-    preview: 'Phantom Force одержали победу над Storm Riders в захватывающем матче из трёх карт со счётом 2:1.'
+    preview: 'Phantom Force одержали победу над Storm Riders в захватывающем матче из трёх карт со счётом 2:1.',
+    image: '',
   },
   {
     id: 'n2',
     title: 'MLT Season 4 пройдёт в формате LAN в Москве',
     date: '2026-03-08',
     category: 'АНОНС',
-    preview: 'Организаторы объявили о проведении четвёртого сезона в офлайн-формате с призовым фондом 200,000 ₽.'
+    preview: 'Организаторы объявили о проведении четвёртого сезона в офлайн-формате с призовым фондом 200,000 ₽.',
+    image: '',
   },
   {
     id: 'n3',
     title: 'Spectre из PF признан MVP марта по версии MLT',
     date: '2026-03-05',
     category: 'НАГРАДЫ',
-    preview: 'AWP-игрок Phantom Force показывает рейтинг 1.31 за сезон и признан лучшим игроком месяца.'
+    preview: 'AWP-игрок Phantom Force показывает рейтинг 1.31 за сезон и признан лучшим игроком месяца.',
+    image: '',
   },
   {
     id: 'n4',
     title: 'Регистрация на MLT Qualifier 2026 открыта',
     date: '2026-03-03',
     category: 'РЕГИСТРАЦИЯ',
-    preview: 'Принять участие в квалификационном турнире могут команды, зарегистрированные на платформе MLT.'
+    preview: 'Принять участие в квалификационном турнире могут команды, зарегистрированные на платформе MLT.',
+    image: '',
   },
 ];
 
 export const sponsors = [
-  { id: 's1', name: 'HYPERX', tier: 'title', color: '#e51837' },
-  { id: 's2', name: 'NVIDIA', tier: 'gold', color: '#76b900' },
-  { id: 's3', name: 'STEELSERIES', tier: 'gold', color: '#f08216' },
-  { id: 's4', name: 'BENQ', tier: 'silver', color: '#1a73e8' },
-  { id: 's5', name: 'LOGITECH G', tier: 'silver', color: '#00b8ef' },
-  { id: 's6', name: 'REDRAGON', tier: 'silver', color: '#cc2200' },
+  {
+    id: 's1',
+    name: 'GUTS NEWS CS2',
+    tier: 'title',
+    image: 'https://cdn.poehali.dev/projects/2a86203d-5c69-41c5-94ca-bbf83eb2d3a8/bucket/98ac0922-7c02-4e87-9207-d418101d66ef.png',
+  },
+  {
+    id: 's2',
+    name: '1XBET',
+    tier: 'gold',
+    image: 'https://cdn.poehali.dev/projects/2a86203d-5c69-41c5-94ca-bbf83eb2d3a8/bucket/387228f5-baaf-402e-afba-a5055b1a1a20.png',
+  },
+  {
+    id: 's3',
+    name: 'MLT',
+    tier: 'silver',
+    image: 'https://cdn.poehali.dev/projects/2a86203d-5c69-41c5-94ca-bbf83eb2d3a8/bucket/ab37af0b-4f57-4848-bff2-ce826c8d34e9.png',
+  },
 ];
